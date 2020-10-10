@@ -18,33 +18,51 @@
         <%= form.label :parent_name, "Parent Name" %>
         <%= form.text_field :parent_name, class: "form-control" %>
       </div>
+      <div class="form-group col-md-12">
+        <%= form.label :gifter_name, "Your Name" %>
+        <%= form.text_field :gifter_name, class: "form-control" %>
+      </div>
+      <div class="form-group col-md-6">
+        <%= form.label :child_full_name, "Child's Name" %>
+        <%= form.text_field :child_full_name, class: "form-control" %>
+      </div>
+      <div class="form-group col-md-6">
+        <%= form.label :child_birthdate, "Child's Birthdate (or expected date)" %>
+        <%= form.text_field :child_birthdate, class: "form-control" %>
+        <small id="passwordHelpBlock" class="form-text text-muted">
+          Use format YYYY-MM-DD
+        </small>
+      </div>
+    <% else %>
+      <div class="form-group col-md-12">
+        <%= form.label :parent_name, "Your Name" %>
+        <%= form.text_field :parent_name, class: "form-control" %>
+      </div>
+      <div class="form-group col-md-6">
+        <%= form.label :child_full_name, "Your Child's Name" %>
+        <%= form.text_field :child_full_name, class: "form-control" %>
+      </div>
+      <div class="form-group col-md-6">
+        <%= form.label :child_birthdate, "Your Child's Birthdate (or expected date)" %>
+        <%= form.text_field :child_birthdate, class: "form-control" %>
+        <small id="passwordHelpBlock" class="form-text text-muted">
+          Use format YYYY-MM-DD
+        </small>
+      </div>
     <% end %>
-    <div class="form-group col-md-12">
-      <%= form.label :shipping_name, "Your Name" %>
-      <%= form.text_field :shipping_name, class: "form-control" %>
-    </div>
-    <div class="form-group col-md-6">
-      <%= form.label :child_full_name, "Your Child's Name" %>
-      <%= form.text_field :child_full_name, class: "form-control" %>
-    </div>
-    <div class="form-group col-md-6">
-      <%= form.label :child_birthdate, "Your Child's Birthdate (or expected date)" %>
-      <%= form.text_field :child_birthdate, class: "form-control" %>
-      <small id="passwordHelpBlock" class="form-text text-muted">
-        Use format YYYY-MM-DD
-      </small>
-    </div>
   </div>
   <div class="form-row">
     <%= form.hidden_field :product_id %>
-    <div class="form-group col-md-8">
-      <%= form.label :address %>
-      <%= form.text_field :address, class: "form-control", placeholder: "e.g. 123 Any St" %>
-    </div>
-    <div class="form-group col-md-4">
-      <%= form.label :zipcode %>
-      <%= form.text_field :zipcode, class: "form-control", placeholder: "e.g. 83701" %>
-    </div>
+    <% unless @is_gift %>
+      <div class="form-group col-md-8">
+        <%= form.label :address %>
+        <%= form.text_field :address, class: "form-control", placeholder: "e.g. 123 Any St" %>
+      </div>
+      <div class="form-group col-md-4">
+        <%= form.label :zipcode %>
+        <%= form.text_field :zipcode, class: "form-control", placeholder: "e.g. 83701" %>
+      </div>
+    <% end %>
   </div>
   <div class="border rounded p-3 bg-light">
     <div class="form-row">

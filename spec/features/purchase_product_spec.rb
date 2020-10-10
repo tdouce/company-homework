@@ -21,7 +21,7 @@ RSpec.feature "Purchase Product", type: :feature do
         parent_name: parent_name
       )
 
-      order = Order.create(
+      existing_order = Order.create(
         user_facing_id: "064b2adb",
         product_id: product.id,
         child_id: child.id,
@@ -40,22 +40,34 @@ RSpec.feature "Purchase Product", type: :feature do
       check("Is this a gift?")
       click_on "Buy Now $10.00"
 
+      gifter_name = "Grandma Jones"
+      gift_message = "Happy Birthday!"
+
       fill_in "order[credit_card_number]", with: "4111111111111111"
       fill_in "order[expiration_month]", with: 12
       fill_in "order[expiration_year]", with: 25
-      fill_in "order[shipping_name]", with: "Pat Jones"
-      fill_in "order[address]", with: "123 Any St"
-      fill_in "order[zipcode]", with: 83701
+      fill_in "order[gifter_name]", with: gifter_name
       fill_in "order[child_full_name]", with: child_name
       fill_in "order[child_birthdate]", with: child_birthdate
       fill_in "order[parent_name]", with: parent_name
-      fill_in "order[message]", with: "Happy Birthday!"
+      fill_in "order[message]", with: gift_message
 
       click_on "Purchase"
 
+      order = Order.last
       expect(page).to have_content("Thanks for Your Order")
-      expect(page).to have_content(Order.last.user_facing_id)
+      expect(page).to have_content(order.user_facing_id)
       expect(page).to have_content(child_name)
+
+      expect(order.shipping_name).to eq(gifter_name)
+      expect(order.message).to eq(gift_message)
+      expect(order.address).to eq(existing_order.address)
+      expect(order.zipcode).to eq(existing_order.zipcode.to_s)
+      expect(order.child.full_name).to eq(child_name)
+      expect(order.child.birthdate.to_s).to eq(child_birthdate)
+      expect(order.child.parent_name).to eq(parent_name)
+      expect(order.product).to eq(product)
+      expect(order.user_facing_id).to be_present
     end
   end
 
@@ -80,7 +92,7 @@ RSpec.feature "Purchase Product", type: :feature do
       fill_in "order[credit_card_number]", with: "4111111111111111"
       fill_in "order[expiration_month]", with: 12
       fill_in "order[expiration_year]", with: 25
-      fill_in "order[shipping_name]", with: "Pat Jones"
+      fill_in "order[parent_name]", with: "Pat Jones"
       fill_in "order[address]", with: "123 Any St"
       fill_in "order[zipcode]", with: 83701
       fill_in "order[child_full_name]", with: "Kim Jones"
@@ -123,7 +135,7 @@ RSpec.feature "Purchase Product", type: :feature do
       fill_in "order[credit_card_number]", with: "4242424242424242"
       fill_in "order[expiration_month]", with: 12
       fill_in "order[expiration_year]", with: 25
-      fill_in "order[shipping_name]", with: "Pat Jones"
+      fill_in "order[parent_name]", with: "Pat Jones"
       fill_in "order[address]", with: "123 Any St"
       fill_in "order[zipcode]", with: 83701
       fill_in "order[child_full_name]", with: "Kim Jones"
