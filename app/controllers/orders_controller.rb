@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   def new
     @order = Order.new(product: Product.find(params[:product_id]))
+    @is_gift = params[:gift].present?
   end
 
   def create
