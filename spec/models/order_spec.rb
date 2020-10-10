@@ -1,6 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe Order, type: :model do
+  describe 'class methods' do
+    describe '.generate_user_facing_id' do
+      let(:secure_random_klass) { class_double(SecureRandom) }
+
+      it 'generates a a unique id' do
+        expect(secure_random_klass).to receive(:uuid).and_return([1,2,3,4,5,6,7,8,9])
+
+        response = described_class.generate_user_facing_id(
+          secure_random_klass: secure_random_klass
+        )
+
+        expect(response).to eq([1,2,3,4,5,6,7,8])
+      end
+    end
+  end
+
   describe "#validations" do
     it "requires shipping_name" do
       order = Order.new(
