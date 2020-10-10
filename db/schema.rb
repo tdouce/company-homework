@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_21_201540) do
+ActiveRecord::Schema.define(version: 2020_10_10_155522) do
 
   create_table "children", force: :cascade do |t|
     t.string "full_name", null: false
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2019_09_21_201540) do
     t.boolean "paid", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "message", limit: 1000
     t.index ["child_id"], name: "index_orders_on_child_id"
     t.index ["product_id"], name: "index_orders_on_product_id"
   end
