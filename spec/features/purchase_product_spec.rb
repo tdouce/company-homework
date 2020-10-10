@@ -88,9 +88,19 @@ RSpec.feature "Purchase Product", type: :feature do
 
       click_on "Purchase"
 
+      order = Order.last
       expect(page).to have_content("Thanks for Your Order")
-      expect(page).to have_content(Order.last.user_facing_id)
+      expect(page).to have_content(order.user_facing_id)
       expect(page).to have_content("Kim Jones")
+
+      expect(order.shipping_name).to eq("Pat Jones")
+      expect(order.address).to eq("123 Any St")
+      expect(order.zipcode).to eq("83701")
+      expect(order.child.full_name).to eq("Kim Jones")
+      expect(order.child.birthdate.to_s).to eq("2019-03-03")
+      expect(order.child.parent_name).to eq("Pat Jones")
+      expect(order.product).to eq(product)
+      expect(order.user_facing_id).to be_present
     end
 
     scenario "Tells us when there was a problem charging our card" do
