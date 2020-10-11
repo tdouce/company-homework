@@ -69,6 +69,38 @@ RSpec.feature "Purchase Product", type: :feature do
       expect(order.product).to eq(product)
       expect(order.user_facing_id).to be_present
     end
+
+    scenario "Tells us if the child can not be found by child name, parent's name, or birth date" do
+      product = Product.create!(
+        name: "product1",
+        description: "description2",
+        price_cents: 1000,
+        age_low_weeks: 0,
+        age_high_weeks: 12
+      )
+
+      visit "/"
+
+      within ".products-list .product" do
+        click_on "More Details…"
+      end
+
+      check("Is this a gift?")
+      click_on "Buy Now $10.00"
+
+      fill_in "order[credit_card_number]", with: "4111111111111111"
+      fill_in "order[expiration_month]", with: 12
+      fill_in "order[expiration_year]", with: 25
+      fill_in "order[gifter_name]", with: "Grandma Jones"
+      fill_in "order[child_full_name]", with: "unidentified child"
+      fill_in "order[child_birthdate]", with: "2010/01/01"
+      fill_in "order[parent_name]", with: "Pat Jones"
+      fill_in "order[message]", with: "Happy Birthday"
+
+      click_on "Purchase"
+
+      expect(page).to have_content("Child must exist")
+    end
   end
 
   context "When the order is not a gift" do
