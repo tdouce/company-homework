@@ -1,16 +1,18 @@
 require 'rails_helper'
 
 RSpec.feature "Purchase Product", type: :feature do
+  let!(:product) do
+    Product.create!(
+      name: "product1",
+      description: "description2",
+      price_cents: 1000,
+      age_low_weeks: 0,
+      age_high_weeks: 12
+    )
+  end
+
   context "When the order is a gift" do
     scenario "Creates an order as a gift and charges us" do
-      product = Product.create!(
-        name: "product1",
-        description: "description2",
-        price_cents: 1000,
-        age_low_weeks: 0,
-        age_high_weeks: 12
-      )
-
       parent_name = "Pat Jones"
       child_name = "Kim Jones"
       child_birthdate = "2019-03-03"
@@ -71,14 +73,6 @@ RSpec.feature "Purchase Product", type: :feature do
     end
 
     scenario "Tells us if the child can not be found by child name, parent's name, or birth date" do
-      product = Product.create!(
-        name: "product1",
-        description: "description2",
-        price_cents: 1000,
-        age_low_weeks: 0,
-        age_high_weeks: 12
-      )
-
       visit "/"
 
       within ".products-list .product" do
@@ -100,19 +94,12 @@ RSpec.feature "Purchase Product", type: :feature do
       click_on "Purchase"
 
       expect(page).to have_content("Child must exist")
+      expect(page).to have_selector("#order_message")
     end
   end
 
   context "When the order is not a gift" do
     scenario "Creates an order and charges us" do
-      product = Product.create!(
-        name: "product1",
-        description: "description2",
-        price_cents: 1000,
-        age_low_weeks: 0,
-        age_high_weeks: 12,
-        )
-
       visit "/"
 
       within ".products-list .product" do
@@ -148,14 +135,6 @@ RSpec.feature "Purchase Product", type: :feature do
     end
 
     scenario "Tells us when there was a problem charging our card" do
-      product = Product.create!(
-        name: "product1",
-        description: "description2",
-        price_cents: 1000,
-        age_low_weeks: 0,
-        age_high_weeks: 12,
-        )
-
       visit "/"
 
       within ".products-list .product" do
