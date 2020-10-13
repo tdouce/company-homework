@@ -6,7 +6,7 @@
   </p>
   <%= form_with url: new_order_path, method: :get do %>
     <%= hidden_field_tag :product_id, @product.id %>
-    <%= submit_tag "Buy Now #{ number_to_currency(@product.price_cents / 100) }", class: "btn btn-primary btn-lg text-uppercase text-tracked font-weight-bolder" %>
+    <%= submit_tag "Buy Now #{ number_to_currency(@product.price_cents / 100) }", id: :submit,class: "btn btn-primary btn-lg text-uppercase text-tracked font-weight-bolder" %>
     <%= label_tag :gift, "Is this a gift?", class: "lead" %>
     <%= check_box_tag :gift, true %>
   <% end %>

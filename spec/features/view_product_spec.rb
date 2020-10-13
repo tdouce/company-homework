@@ -17,6 +17,6 @@ RSpec.feature "View Product", type: :feature do
     end
 
     expect(page).to have_content("description2")
-    expect(page).to have_content("$10.00")
+    expect(find("#submit").value).to include("$10.00")
   end
 end
