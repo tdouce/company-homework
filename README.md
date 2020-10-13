@@ -77,3 +77,39 @@ or `scenario` block, and this app has many examples to follow.
 Finally, while we tried to write a clean and well-tested app for you, we will go ahead and admit now that it's not
 perfect and there are things that could be improved.  We might ask you about your thoughts on some of this code
 later, but this is all part of the scenario - real-world code is never as nice as we'd like.
+
+## What I Did And Why
+
+The gifting feature code changes were intended to be as minimal as possible, while providing a well architected and 
+tested implementation. The implementation is intended to deliver the most basic gifting functionality where improvements 
+(i.e. ui/ux, error messaging, etc) could be delivered in subsequent iterations. Additionally, assumptions were made to 
+simplify and expedite the delivery of this feature. 
+
+The following assumptions were made:
+
+* The gift giver can not provide a shipping address and zip code. It was not clear to me from the instructions if the 
+  gifter should have the option to supply shipping information (i.e. form inputs present but not required).
+* The shipping address and zip code for the previous order is correct.
+* All children in the system have an existing order.
+
+The user experience for purchasing an order as a gift is such that a user can indicate that an order is a gift on the 
+product show page by checking a “Is this a gift?” option. The checkout form for a standard order (i.e. an order that is 
+not a gift) is visually different from the form for a gift order (i.e. an order that is a gift). The gift order form 
+attempts to clarify to the user which fields are required to match a previous order in the system, as well as describing 
+where the gift will be shipped. If the user enters incorrect information (i.e. child’s name that is not associated with
+a previous order), then the user sees a basic error message. It’s worth noting that I foresee the UI/UX experience for 
+gift ordering as an opportunity for improvement.
+
+The code base required changes to support gifting. The product show page (`app/view/products/show.html.erb`) was modified 
+to support passing a gift parameter. The order form (`app/views/order/new.html.erb`) was modified to conditionally render 
+the gift vs standard order version of the form. The `OrderForm` class was created to manage order processing. This class 
+delegates gift order processing to the `GiftOrder` class and standard orders to the `StandardOrder` class. These classes 
+were introduced, in part, to tease apart two different responsibilities (i.e. ordering a product as a gift vs ordering a 
+product not as a gift). Additionally, it made the classes more narrowly focused (i.e. single responsibility) as well as 
+making them easier to test. The column `orders.message` was added to the database to persist gift messages.
+
+It’s worth noting that future iterations of the user experience could include:
+
+* Providing real-time feedback to the user if the user enters incorrect information
+* Populating form fields with previously submitted values on an unsuccessful form submission
+* Add a more detailed error message when user enters incorrect information for a gift order
