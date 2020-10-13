@@ -44,7 +44,7 @@ class GiftOrder
       return {}
     end
 
-    previous_order = child.orders.order(:created_at, :desc).first!
+    previous_order = child.orders.where(paid: true).order(:created_at, :desc).first!
 
     {
       address: previous_order.address,
